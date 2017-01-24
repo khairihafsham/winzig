@@ -1,0 +1,28 @@
+version: "2"
+
+services:
+  web:
+    build: ./
+    image: winzig_web
+    volumes:
+      - .:/opt/winzig
+    working_dir: /opt/winzig
+    hostname: ws-web
+    command: /usr/local/bin/flask run --host=0.0.0.0
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres.local
+      - redis.local
+    environment:
+      - FLASK_DEBUG=1
+      - FLASK_APP=winzig
+      - PYTHONPATH=/opt/winzig
+
+  postgres.local:
+    image: postgres:9.6
+    hostname: ws-postgres
+
+  redis.local:
+    hostname: ws-redis
+    image: redis

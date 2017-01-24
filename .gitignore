@@ -1,0 +1,7 @@
+.DS_Store
+.cache
+*sw[p,o]
+.coverage
+htmlcov
+todo*
+__pycache__

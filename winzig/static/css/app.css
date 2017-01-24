@@ -1,0 +1,21 @@
+body {
+  background-color: #00b3fe;
+}
+
+#main {
+  margin-top: 15%;
+}
+
+#top-bar {
+  height: 20px;
+  background-color: #384452;
+  width: 100%;
+}
+
+.header {
+  color: #f5f5f5;
+}
+
+.header-lg {
+  font-size: 70px;
+}
