@@ -16,3 +16,5 @@ grab==0.6.32
 behave==1.2.5
 Flask-Testing==0.6.1
 gunicorn==19.6.0
+redis==2.10.5
+pyquery==1.2.17

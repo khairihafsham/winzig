@@ -10,8 +10,8 @@
 ##Setup:
 
 1. `cd` into folder
-2. docker-compose build web
-3. docker-compose up -d
+2. make compose build web
+3. make -- compose up -d
 4. add `127.0.0.1 winzig.local` to your `/etc/hosts` file.
 5. make reset-db
 
