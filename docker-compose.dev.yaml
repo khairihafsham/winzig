@@ -1,0 +1,13 @@
+version: "2"
+
+services:
+  web:
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres.local
+      - redis.local
+
+  postgres.local:
+    image: postgres:9.6
+    hostname: wz-postgres
