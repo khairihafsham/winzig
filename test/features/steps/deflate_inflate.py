@@ -56,6 +56,7 @@ def step_want_to_inflate_previous_deflate_url(context):
 
 @when('I go to the deflated URL')
 def step_go_to_deflated_url(context):
+    print("this is the url %s" % context.deflated_url)
     context.doc = context.g.go(context.deflated_url)
 
 

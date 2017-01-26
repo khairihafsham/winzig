@@ -1,11 +1,14 @@
 from unittest import TestCase
 from unittest.mock import patch
 
+from redis import Redis
+
 from sqlalchemy import create_engine
 from sqlalchemy_utils import create_database, database_exists, drop_database
 
 from winzig.test_settings import DB_URI
 from winzig.database import db_session, init_db, drop_db
+from winzig.cache import cache
 
 from urlzip.urlservice import add_http, deflate_url, inflate_url
 from urlzip.storageservice import store_url, get_url_by_id, get_url_by_url
@@ -14,6 +17,11 @@ from urlzip.exceptions import InvalidURL
 
 
 class URLServiceTestCase(TestCase):
+    def setUp(self):
+        redis = Redis('redis.local')
+        redis.flushdb()
+        cache.configure(host='redis.local')
+
     def test_add_http(self):
         items = (
             ('http://test', 'test'),
@@ -34,6 +42,10 @@ class URLServiceTestCase(TestCase):
     def test_inflate_url_gets_known_hash(self, mock_get_url_by_id):
         urlmap = URLMap(id=1, url="https://google.com")
         mock_get_url_by_id.return_value = urlmap
+        result = inflate_url('jR')
+        self.assertEquals('https://google.com', result)
+
+        # test with cache
         result = inflate_url('jR')
         self.assertEquals('https://google.com', result)
 

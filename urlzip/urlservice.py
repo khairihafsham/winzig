@@ -6,6 +6,7 @@ from formencode import validators, Invalid, All
 from urlzip.storageservice import get_url_by_id, get_url_by_url, store_url
 from urlzip.models import URLMap
 from urlzip.exceptions import InvalidURL
+from winzig.cache import cache
 
 scheme_re = re.compile('^https?://')
 
@@ -45,16 +46,26 @@ def inflate_url(hash_str):
     """For the given hash_str, get the real id and find the record from
     storage. Returns the url if found, None otherwise
 
+    This method also utilizes cache. If hash_str is found in cache, it will not
+    query the db. Otherwise, if the db returns URL for the hash_str, it will
+    be cached and used for the next time
+
     :hash_str: string
     :returns: url string or None
     """
     hashids = Hashids()
     decoded = hashids.decode(hash_str)
+    cache_key = 'inflate_url_%s' % hash_str
+    cache_value = cache.get(cache_key)
+
+    if cache_value:
+        return cache_value
 
     if len(decoded) > 0:
         urlmap = get_url_by_id(decoded[0])
 
         if isinstance(urlmap, URLMap):
+            cache.set(cache_key, urlmap.url)
             return urlmap.url
 
     return None
