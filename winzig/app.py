@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from flask import Flask, abort, request, session
 
 from winzig.database import db_session
+from winzig.cache import cache
 
 env = 'WINZIG_SETTINGS'
 app = Flask(__name__)
@@ -17,6 +18,7 @@ import winzig.views  # noqa
 
 engine = create_engine(app.config['DB_URI'], convert_unicode=True)
 db_session.configure(bind=engine)
+cache.configure(**app.config['REDIS_CONFIG'])
 
 
 @app.teardown_appcontext
