@@ -46,6 +46,10 @@ def inflate_url(hash_str):
     """For the given hash_str, get the real id and find the record from
     storage. Returns the url if found, None otherwise
 
+    This method also utilizes cache. If hash_str is found in cache, it will not
+    query the db. Otherwise, if the db returns URL for the hash_str, it will
+    be cached and used for the next time
+
     :hash_str: string
     :returns: url string or None
     """
