@@ -31,7 +31,7 @@ class RedisCache(object):
 
         return self._redis
 
-    def set(self, key, value, expiry=None):
+    def set(self, key, value, expiry=300):
         """
         :key: string of cache key
         :value: string value to cache
