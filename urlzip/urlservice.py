@@ -6,6 +6,7 @@ from formencode import validators, Invalid, All
 from urlzip.storageservice import get_url_by_id, get_url_by_url, store_url
 from urlzip.models import URLMap
 from urlzip.exceptions import InvalidURL
+from winzig.cache import cache
 
 scheme_re = re.compile('^https?://')
 
@@ -50,11 +51,17 @@ def inflate_url(hash_str):
     """
     hashids = Hashids()
     decoded = hashids.decode(hash_str)
+    cache_key = 'inflate_url_%s' % hash_str
+    cache_value = cache.get(cache_key)
+
+    if cache_value:
+        return cache_value
 
     if len(decoded) > 0:
         urlmap = get_url_by_id(decoded[0])
 
         if isinstance(urlmap, URLMap):
+            cache.set(cache_key, urlmap.url)
             return urlmap.url
 
     return None
